@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: fill-cars-table-with-data
+      author: carsharingservice
+      changes:
+        - insert:
+            tableName: cars
+            columns:
+              - column: {name: "model", value: "Kia"}
+              - column: {name: "brand", value: "Sportage"}
+              - column: {name: "car_type", value: "SUV"}
+              - column: {name: "inventory", value: "2"}
+              - column: {name: "daily_fee", value: "165.50"}
+        - insert:
+            tableName: cars
+            columns:
+              - column: {name: "model", value: "Ford"}
+              - column: {name: "brand", value: "Focus"}
+              - column: {name: "car_type", value: "HATCHBACK"}
+              - column: {name: "inventory", value: "3"}
+              - column: {name: "daily_fee", value: "124.00"}
+        - insert:
+            tableName: cars
+            columns:
+              - column: {name: "model", value: "Volkswagen"}
+              - column: {name: "brand", value: "Jetta"}
+              - column: {name: "car_type", value: "SEDAN"}
+              - column: {name: "inventory", value: "5"}
+              - column: {name: "daily_fee", value: "111.70"}
+        - insert:
+            tableName: cars
+            columns:
+              - column: {name: "model", value: "Renault"}
+              - column: {name: "brand", value: "Megane"}
+              - column: {name: "car_type", value: "UNIVERSAL"}
+              - column: {name: "inventory", value: "7"}
+              - column: {name: "daily_fee", value: "95.35"}
