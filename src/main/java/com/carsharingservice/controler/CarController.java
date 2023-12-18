@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/cars")
 public class CarController {
     private final CarService carService;
-    private final CarMapper carMapper;
 
     @GetMapping
     public List<CarResponseDto> getAll(Pageable pageable) {
