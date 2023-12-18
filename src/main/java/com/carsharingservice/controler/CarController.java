@@ -2,7 +2,6 @@ package com.carsharingservice.controler;
 
 import com.carsharingservice.dto.CarRequestDto;
 import com.carsharingservice.dto.CarResponseDto;
-import com.carsharingservice.mapper.CarMapper;
 import com.carsharingservice.service.CarService;
 import jakarta.validation.Valid;
 import java.util.List;
