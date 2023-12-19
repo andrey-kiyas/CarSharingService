@@ -1,8 +1,8 @@
 package com.carsharingservice.mapper;
 
-import com.carsharingservice.condig.MapperConfig;
-import com.carsharingservice.dto.CarRequestDto;
-import com.carsharingservice.dto.CarResponseDto;
+import com.carsharingservice.config.MapperConfig;
+import com.carsharingservice.dto.car.CarRequestDto;
+import com.carsharingservice.dto.car.CarResponseDto;
 import com.carsharingservice.model.Car;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

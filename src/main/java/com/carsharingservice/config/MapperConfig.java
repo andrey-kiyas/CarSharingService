@@ -1,4 +1,4 @@
-package com.carsharingservice.condig;
+package com.carsharingservice.config;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.NullValueCheckStrategy;
