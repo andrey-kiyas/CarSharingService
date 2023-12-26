@@ -144,7 +144,7 @@ docker-compose up --build
 
 5. The application should now be running at http://localhost:8081.
 
-<p align="right" id="home"> <a href="#introduction" style="color: #418739">back to menu</a> </p>
+<p align="right"> <a href="#home" style="color: #418739">back to menu</a> </p>
 
 ---
 <h2 id="project-architecture">Project architecture</h2>
