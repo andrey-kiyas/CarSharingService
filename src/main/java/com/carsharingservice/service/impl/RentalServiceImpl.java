@@ -11,6 +11,7 @@ import com.carsharingservice.model.Rental;
 import com.carsharingservice.repository.CarRepository;
 import com.carsharingservice.repository.RentalRepository;
 import com.carsharingservice.repository.UserRepository;
+import com.carsharingservice.service.NotificationService;
 import com.carsharingservice.service.RentalService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class RentalServiceImpl implements RentalService {
     private final UserRepository userRepository;
     private final RentalRepository rentalRepository;
     private final RentalMapper rentalMapper;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -42,6 +44,7 @@ public class RentalServiceImpl implements RentalService {
         rental.setUser(userRepository.getReferenceById(userId));
         rental.setRentalDateTime(LocalDateTime.now());
         rental.setReturnDateTime(requestDto.returnDateTime());
+        notificationService.sendMessageAboutCreatedRental(rental);
         return rentalMapper.toDto(rentalRepository.save(rental));
     }
 
@@ -79,6 +82,7 @@ public class RentalServiceImpl implements RentalService {
         }
         rental.setActualReturnDateTime(LocalDateTime.now());
         if (rental.getActualReturnDateTime().isAfter(rental.getReturnDateTime())) {
+            notificationService.sendMessageAboutOverdueRental(rental);
             System.out.println("Fine");
         }
         Car car = rental.getCar();

@@ -24,3 +24,6 @@ databaseChangeLog:
                     referencedColumnNames:  id
                     nullable:  false
                     primaryKey: true
+      rollback:
+        - dropTable:
+            tableName: users_roles

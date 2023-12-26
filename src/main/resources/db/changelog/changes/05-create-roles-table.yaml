@@ -25,3 +25,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   defaultValue: "false"
+      rollback:
+        - dropTable:
+            tableName: roles
