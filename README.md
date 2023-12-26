@@ -1,8 +1,8 @@
-﻿<h1 align="center">Car Sharing App</h1>
+﻿<h1 align="center" id="home">Car Sharing App</h1>
 
 ___
 <h3>
-<p align="center" id="home">
+<p align="center">
   <a href="#introduction" style="color: #ac4400">Introduction</a> -
   <a href="#technologies" style="color: #ac4400">Technologies</a> -
   <a href="#models" style="color: #ac4400">Models</a> -
