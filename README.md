@@ -49,6 +49,7 @@ The Car model is a structured representation of a vehicle available in a car sha
 attributes for effective management and user interaction. <br>
 It includes the following attributes:
 <details>
+<summary>Details</summary>
 
 * Model: A distinctive identifier denoting the specific name or label of the car model.
 * Brand: The brand or manufacturer responsible for producing the car, providing insight into its origin.
@@ -69,6 +70,7 @@ This model is a basic representation of customer information and is commonly use
 applications. The password field is securely hashed and stored. <br>
 It includes the following attributes:
 <details>
+<summary>Details</summary>
 
 * Email: String, representing the user's email address.
 * First name: String, representing the user's first name.
@@ -82,6 +84,7 @@ It includes the following attributes:
 Provides the possible roles, including CUSTOMER and MANAGER. This model is commonly used for managing user roles and
 permissions.
 <details>
+<summary>Details</summary>
 
 * CUSTOMER - default role for all registered users
 * MANAGER - with this role you can manage cars and rentals
@@ -93,6 +96,7 @@ permissions.
 The Rental model encapsulates information related to a car rental transaction. <br>
 It includes the following attributes:
 <details>
+<summary>Details</summary>
 
 * Rental date: Represents the date when the car was rented.
 * Return date: Signifies the expected date for the car to be returned.
@@ -107,6 +111,7 @@ It includes the following attributes:
 The Payment model represents a financial transaction. <br>
 It encompasses the following attributes:
 <details>
+<summary>Details</summary>
 
 * Status: An enumeration with possible values PENDING, PAID or CANCELED, indicating the current status of the payment.
 * Type: An enumeration with possible values PAYMENT or FINE, specifying whether the transaction is related to a regular
