@@ -1,8 +1,8 @@
-﻿<h1 align="center" id="home">Car Sharing App</h1>
+﻿<h1 align="center">Car Sharing App</h1>
 
 ___
 <h3>
-<p align="center">
+<p align="center" id="home">
   <a href="#introduction" style="color: #ac4400">Introduction</a> -
   <a href="#technologies" style="color: #ac4400">Technologies</a> -
   <a href="#models" style="color: #ac4400">Models</a> -
@@ -22,7 +22,7 @@ created, paid or expired are sent to the user via a Telegram bot. They can be ad
 application administrator. Stripe API was used as a payment system. Payments are secure and if there is an error the
 transaction will be cancelled.
 
-
+<p align="right"> <a href="#home" style="color: #418739">back to menu</a> </p>
 
 ---
 <h2 id="technologies"> Technologies </h2>
@@ -37,7 +37,7 @@ transaction will be cancelled.
 - Telegram API
 - Stripe API
 
-
+<p align="right"> <a href="#home" style="color: #418739">back to menu</a> </p>
 
 ---
 
@@ -118,7 +118,7 @@ It encompasses the following attributes:
 
 </details>
 
-<p align="right" id="home"> <a href="#introduction" style="color: #418739">back to menu</a> </p>
+<p align="right"> <a href="#home" style="color: #418739">back to menu</a> </p>
 
 ---
 <h2 id="how-to-run"> How run this project</h2>
@@ -151,14 +151,14 @@ docker-compose up --build
 
 ![Project architecture](assets/csa_architecture.png)
 
-<p align="right" id="home"> <a href="#introduction" style="color: #418739">back to menu</a> </p>
+<p align="right"> <a href="#home" style="color: #418739">back to menu</a> </p>
 
 ---
 <h2 id="database-structure">Database structure</h2>
 
 ![Database structure](assets/csa_data_base.png)
 
-<p align="right" id="home"> <a href="#introduction" style="color: #418739">back to menu</a> </p>
+<p align="right"> <a href="#home" style="color: #418739">back to menu</a> </p>
 
 ---
 <h2 id="controllers">Controllers and endpoints available</h2>
@@ -200,8 +200,7 @@ new car, update info on an existing one, update customer's role.
 
 ### **Payment Controller:** _Managing and browsing payments_
 
-| **HTTP method** |         **Endpoint**          | **Role** | **
-Function**                                                                  |
+| **HTTP method** |         **Endpoint**          | **Role** | **Function**                                                                  |
 |:---------------:|:-----------------------------:|:--------:|:------------------------------------------------------------------------------|
 |       GET       |         /api/payments         | CUSTOMER | Enables customers to get all their payments                                   |
 |       GET       | /api/payments/search/?status= | CUSTOMER | Enables customers to get all their payments by status (PAID/PENDING/CANCELED) |
@@ -211,8 +210,7 @@ Function**                                                                  |
 
 ### **Rental Controller:** _Managing and browsing rentals_
 
-| **HTTP method** |               **Endpoint**               | **Role** | **
-Function**                                                          |
+| **HTTP method** |               **Endpoint**               | **Role** | **Function**                                                          |
 |:---------------:|:----------------------------------------:|:--------:|:----------------------------------------------------------------------|
 |      POST       |               /api/rentals               | CUSTOMER | Enables customers to create new rental                                |
 |       GET       |               /api/rentals               | CUSTOMER | Enables customers to get all their rentals                            |
@@ -220,6 +218,6 @@ Function**                                                          |
 |       GET       | /api/rentals/search/?user_id=&is_active= | MANAGER  | Enables managers to search rentals using userId and activeness        |
 |      POST       |         /api/rentals/{id}/return         | MANAGER  | Enables managers to return rental by setting actual return date       |
 
-<p align="right" id="home"> <a href="#introduction" style="color: #418739">back to menu</a> </p>
+<p align="right"> <a href="#home" style="color: #418739">back to menu</a> </p>
 
 
