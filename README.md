@@ -1,293 +1,201 @@
-# Car Sharing Service project description
+﻿<h1 align="center">Car Sharing App</h1>
 
-There is a car sharing service in your city, where you can rent cars and pay for your usage using cash, depending on the
-duration of your rental.
-The problem is, the system for tracking cars, rentals, users, and payments in the car sharing service is outdated -
-everything is managed manually and all records are kept on paper. There is no way to check the availability of specific
-cars in the service. Additionally, you can only make payments with cash; there is no support for credit cards. The car
-sharing service administration has no way of knowing who returned the car on time and who did not.
+___
+<p align="center">
+  <a href="#introduction">Introduction</a> -
+  <a href="#technologies">Technologies</a> -
+  <a href="#models">Models</a> -
+  <a href="#how-to-run">How run this project</a> -
+  <a href="#project-architecture">Project architecture</a> -
+  <a href="#database-structure">Database structure</a> -
+  <a href="#controllers">Controllers</a>
+</p>
 
-In this project, you will be addressing all these issues. Your task is to implement an online management system for car
-rentals. This system will streamline the work of the service administrators and greatly enhance the user experience.
+___
+<h2 id="introduction"> Introduction</h2>
 
-## If you work in a team
+Car Sharing Service App is a car rental application with JWT authorization to secure access to the application. Users are divided into managers and clients to separate rights in the application. Notifications that a rental has been created, paid or expired are sent to the user via a Telegram bot. They can be adjusted at the discretion of the application administrator. Stripe API was used as a payment system. Payments are secure and if there is an error the transaction will be cancelled.
 
-1. Create an organization on GitHub
-   ![Create an organization](description/create-an-organization.png)
-2. Choose a `Free` plan
-3. Use a name like `fe-feb20-team0` (your group + your team name)
-4. It should belong to your personal account
-   ![Set up your team](description/set-up-your-team.png)
-5. Add your teammates to the team by their usernames on Github
-   ![Add your teammate](description/add-your-teammate.png)
+---
+<h2 id="technologies"> Technologies </h2>
 
-## Instructions
+- Java 17
+- Spring Boot, Spring Security, Spring data JPA
+- MySQL, Liquibase, Hibernate
+- REST, Mapstruct
+- Maven, Docker
+- Lombok, Swagger
+- Junit, Mockito, testcontainers
+- Telegram API
+- Stripe API
 
-1. Create a new Spring Boot project
-2. Create a new GitHub repo with `car-sharing-app` name (or any other you like)
-    - if you work in a team the repo MUST belong to the organization;
-    - configure `Branch protection rules` for the organization repository using the following tutorial:
+---
 
-      <details>
-        <summary>Tutorial for branch protection rules</summary>
+<h2 id="models"> Models</h2>
 
-      Go to the repository settings
-      STEP #1
-      ![Add your teammate](description/first-step-for-branch-protection-rules.png)
+### Car:
+The Car model is a structured representation of a vehicle available
+in a car sharing service, encompassing key attributes for effective
+management and user interaction. <br>
+It includes the following attributes:
+<details>
 
-      STEP #2
-      ![Add your teammate](description/second-step-for-branch-protection-rules.png)
+* Model: A distinctive identifier denoting the specific name or label of the
+  car model.
+* Brand: The brand or manufacturer responsible for producing the car,
+  providing insight into its origin.
+* Type: An enumeration capturing the body type of the car.
+  It can take values from the set
+  {SEDAN, SUV, HATCHBACK, UNIVERSAL},
+  elucidating the vehicle's structural category.
+* Inventory: An integer reflecting the current availability of this
+  particular car within the car sharing service.
+  This attribute aids in real-time tracking of the car's stock.
+* Daily Fee: A decimal value in $USD, indicating the cost users incur per day
+  when renting this car. This information facilitates transparent pricing
+  for potential renters.
+* Image URL: A string representing a URL pointing to an image of the car.
+  This visual aid allows users to preview the car's appearance before
+  making a rental selection.
 
-      Add the rule with only next settings
-      STEP #3
-      ![Add your teammate](description/third-step-for-branch-protection-rules.png)
+</details>
 
-      More information about all other settings at
-      the [link](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/defining-the-mergeability-of-pull-requests/managing-a-branch-protection-rule)
-      </details>
+### User (Customer):
+This model is a basic representation of customer information
+and is commonly used in user management systems for applications.
+The password field is securely hashed and stored. <br>
+It includes the following attributes:
+<details>
 
-3. Connect a repo to a folder with your Spring Boot project (see the instructions on GitHub);
-4. Setup checkstyle plugin in your project
-5. Setup CI process to run `mvn clean verify` command by adding a `.github/workflows/ci.yml` file
-6. The `master` (or `main`) branch is a base for your feature PullRequests.
-7. PRs should be merged there after review
-
-## How to develop a feature
-
-1. `Pull` the latest `master`.
-2. Create a `your-feature-name` branch and `push` it to GitHub.
-3. Open a Pull Request (`PR`) from your branch to the `master` (`main`).
-4. Discuss branches and commits naming practices. Your branch, PR, and commit names should be consistent across the
-   team. Example of PR names:
-    - [DB]: prefix for liquibase scripts
-    - [API] for scripts with api changes
-5. Do not use forks, work in single repo altogether!
-6. Write your code, save it and push it to GitHub.
-7. Ask your teammate to review and approve if everything is OK.
-8. If some fixes are required discuss the comments and repeat steps 5-7.
-9. Mentors will review your codebase everyday, but not PRs.
-
-## App
-
-### Requirements:
-
-- Functional (what the system should do):
-    - Web-based
-    - Manage car sharing inventory
-    - Manage car rentals
-    - Manage customers
-    - Display notifications
-    - Handle payments
-- Non-functional (what the system should deal with):
-    - Support up to 5 concurrent users
-    - Manage up to 1000 cars
-    - Handle 50,000 rentals per year
-    - Approximately 30MB of data per year
-
-### Architecture
-
-![architecture](description/architecture.png)
+* Email: String, representing the user's email address.
+* First name: String, representing the user's first name.
+* Last name: String, representing the user's last name.
+* Password: String, representing the user's password.
+</details>
 
 
+### Role
+Provides the possible roles, including CUSTOMER and MANAGER.
+This model is commonly used for managing user roles and permissions.
+<details>
+
+* CUSTOMER - default role for all registered users
+* MANAGER - with this role you can manage cars and rentals
+</details>
+
+### Rental
+The Rental model encapsulates information related to a car rental transaction. <br>
+It includes the following attributes:
+<details>
+
+* Rental date: Represents the date when the car was rented.
+* Return date: Signifies the expected date for the car to be returned.
+* Actual return date: Records the actual date when the car was returned.
+* Car ID: A unique identifier associated with the specific car involved in the rental.
+* User ID: A unique identifier corresponding to the user who initiated the rental.
+</details>
+
+### Payment:
+The Payment model represents a financial transaction. <br>
+It encompasses the following attributes:
+<details>
+
+* Status: An enumeration with possible values PENDING, PAID or CANCELED,
+  indicating the current status of the payment.
+* Type: An enumeration with possible values PAYMENT or FINE,
+  specifying whether the transaction is related to a regular payment or a fine.
+* Rental: A unique identifier associated with the specific car
+  rental to which the payment or fine is related.
+* Session URL: A URL pointing to the payment session with a stripe,
+  facilitating online payment processing.
+* Session ID: A String representing the unique identifier
+  of the payment session.
+* Amount to Pay: A decimal value (in $USD) representing the
+  calculated total price for the rental or fine.
+</details>
+
+---
+<h2 id="how-to-run"> How run this project</h2>
+
+1. Make sure you have installed next tools
+ <li><img src="assets/java.png" alt="" width="25"> JDK 17+</li>
+ <li><img src="assets/docker.png" alt="" width="25"> <a href="https://www.docker.com/">Docker</a></li>
+
+2. Clone project
+```text
+git clone https://github.com/andrey-kiyas/CarSharingService
+```
+
+3. Create `.env` file  in the root of project and populate variables from `.env.sample` file
+
+4. Run the following command to build and start the Docker containers
+```
+docker-compose up --build
+```
+5. The application should now be running at http://localhost:8081.
+
+---
+<h2 id="project-architecture">Project architecture</h2>
+
+![Project architecture](assets/csa_architecture.png)
+
+---
+<h2 id="database-structure">Database structure</h2>
+
+![Database structure](assets/csa_data_base.png)
+
+---
+<h2 id="controllers">Controllers and endpoints available</h2>
+
+Unauthorized customers can access endpoints to see all cars or info on one certain car.
+After registration and login customer can create a new rental, see info on their rental history,
+and pay for rental. Manager can modify data: add a new car, update info on an existing one, update customer's role.
+
+### **Authentication Controller:**
+
+| **HTTP method** |      **Endpoint**      | **Role** | **Function**                                   |
+|:---------------:|:----------------------:|:--------:|:-----------------------------------------------|
+|      POST       | /api/auth/registration |   ALL    | Allows a new customer to register              |
+|      POST       |    /api/auth/login     |   ALL    | Authenticates a customer and returns JWT token |
+
+---
+### **User Controller:** _Updating and getting user info_
+
+| **HTTP method** |     **Endpoint**     | **Role** | **Function**                                             |
+|:---------------:|:--------------------:|:--------:|:---------------------------------------------------------|
+|       GET       |    /api/users/me     | CUSTOMER | Enables customers to get info about themselves           |
+|      PATCH      |  /api/users/update   | CUSTOMER | Enables customers to update their firstname and lastname |
+|       PUT       | /api/users/{id}/role | MANAGER  | Enables managers to update user's role                   |
+
+---
+### **Car Controller:** _Managing and browsing cars_
+
+| **HTTP method** |     **Endpoint**      | **Role** | **Function**                                                  |
+|:---------------:|:---------------------:|:--------:|:--------------------------------------------------------------|
+|       GET       |       /api/cars       |   ALL    | Enables even unauthorized users to get all cars               |
+|       GET       |    /api/cars/{id}     |   ALL    | Enables even unauthorized users to get info on a specific car |
+|      POST       |       /api/cars       | MANAGER  | Enables manager to add a new car to DB                        |
+|       PUT       |    /api/cars/{id}     | MANAGER  | Enables managers to update info on an existing in DB car      |
+|     DELETE      | /api/categories/{id}  | MANAGER  | Enables managers to delete a car from DB                      |
+
+---
+### **Payment Controller:** _Managing and browsing payments_
+
+| **HTTP method** |         **Endpoint**          | **Role** | **Function**                                                                  |
+|:---------------:|:-----------------------------:|:--------:|:------------------------------------------------------------------------------|
+|       GET       |         /api/payments         | CUSTOMER | Enables customers to get all their payments                                   |
+|       GET       | /api/payments/search/?status= | CUSTOMER | Enables customers to get all their payments by status (PAID/PENDING/CANCELED) |
+|      POST       |       /api/payments/pay       | CUSTOMER | Enables customers to create session to use Stripe                             |
+
+---
+### **Rental Controller:** _Managing and browsing rentals_
+
+| **HTTP method** |               **Endpoint**               | **Role** | **Function**                                                          |
+|:---------------:|:----------------------------------------:|:--------:|:----------------------------------------------------------------------|
+|      POST       |               /api/rentals               | CUSTOMER | Enables customers to create new rental                                |
+|       GET       |               /api/rentals               | CUSTOMER | Enables customers to get all their rentals                            |
+|       GET       |         /api/rentals/?is_active=         | CUSTOMER | Enables customers to get all their rentals by activeness (true/false) |
+|       GET       | /api/rentals/search/?user_id=&is_active= | MANAGER  | Enables managers to search rentals using userId and activeness        |
+|      POST       |         /api/rentals/{id}/return         | MANAGER  | Enables managers to return rental by setting actual return date       |
 
 
-### Models
-
-1. Car:
-    - Model: String
-    - Brand: String
-    - Type: Enum: SEDAN | SUV | HATCHBACK | UNIVERSAL
-    - Inventory (the number of this specific car available for now in the car sharing service): int
-    - Daily fee: decimal (in $USD)
-2. User (Customer):
-    - Email: String
-    - First name: String
-    - Last name: String
-    - Password: String
-    - Role: Enum: MANAGER | CUSTOMER
-3. Rental:
-    - Rental date: LocalDate
-    - Return date: LocalDate
-    - Actual return date: LocalDate
-    - Car id: Long
-    - User id: Long
-4. Payment:
-    - Status: Enum: PENDING | PAID
-    - Type: Enum: PAYMENT | FINE
-    - Rental id: Long
-    - Session url: Url # URL for the payment session with a payment provider
-    - Session id: String # ID of the payment session
-    - Amount to pay: decimal (in $USD)  # calculated rental total price
-
-### Controllers
-
-1. Authentication Controller:
-    - POST: /register - register a new user
-    - POST: /login - get JWT tokens
-
-2. Users Controller: Managing authentication and user registration
-    - PUT: /users/{id}/role - update user role
-    - GET: /users/me - get my profile info
-    - PUT/PATCH: /users/me - update profile info
-
-3. Cars Controller: Managing car inventory (CRUD for Cars)
-    - POST: /cars - add a new car
-    - GET: /cars - get a list of cars
-    - GET: /cars/<id> - get car's detailed information
-    - PUT/PATCH: /cars/<id> - update car (also manage inventory)
-    - DELETE: /cars/<id> - delete car
-
-4. Rentals Controller: Managing users' car rentals
-    - POST: /rentals - add a new rental (decrease car inventory by 1)
-    - GET: /rentals/?user_id=...&is_active=... - get rentals by user ID and whether the rental is still active or not
-    - GET: /rentals/<id> - get specific rental
-    - POST: /rentals/<id>/return - set actual return date (increase car inventory by 1)
-
-5. Payments Controller (Stripe): Facilitates payments for car rentals through the platform. Interacts with Stripe API.
-   Use stripe-java library.
-    - GET: /payments/?user_id=... - get payments
-    - POST: /payments/ - create payment session
-    - GET: /payments/success/ - check successful Stripe payments (Endpoint for stripe redirection)
-    - GET: /payments/cancel/ - return payment paused message (Endpoint for stripe redirection)
-
-6. Notifications Service (Telegram):
-    - Notifications about new rentals created, overdue rentals, and successful payments
-    - Other services interact with it to send notifications to car sharing service administrators.
-    - Uses Telegram API, Telegram Chats, and Bots.
-
-## Coding
-
-- Add checkstyle plugin.
-- Separate PR to the `main` branch for each task is required.
-- 60%+ of the custom code should be covered with tests.
-- Make sure to name your commits & branches meaningfully.
-- Do not use forks, work in single repo altogether.
-
-## Tasks
-
-### Infrastructure
-
-- Create Trello board for task management
-- Create a GitHub organization
-- Create a project
-- Add maven checkstyle plugin
-- Configure CI process
-- Add liquibase support
-- Add health check controller
-- Add Docker and docker-compose support
-- Use .env file in the docker with all sensitive information and push only .env.sample with a skeleton data from .env
-  file.
-- Add swagger documentation to project
-- Fulfill README.md after project finalization
-
-### Implement CRUD functionality for Car Service
-
-- Add car table into DB
-- Create entity Car
-- Implement controllers for all endpoints
-- Add permissions to Car Controller
-    - Only admin users can create/update/delete cars
-    - All users (even those not authenticated) should be able to list cars
-- Use JWT token authentication for users' service
-
-### Implement CRUD for Users Service
-
-- Add user table into DB
-- Add user entity
-- Add JWT support
-- Implement all controllers endpoints
-
-### Implement Rental List & Detail endpoint
-
-- Add rental table into DB with constraints for rental date, return date, and actual return date
-- Add rental entity
-- Implement a get mapper with detailed car info
-- Implement list & detail endpoints
-- Validate car availability (inventory is not 0)
-- Attach the current user to the rental\
-
-### Add filtering for the Rental List endpoint
-
-- Ensure all non-admins can only see their rentals
-- Ensure rentals are available only for authenticated users
-- Add the `is_active` parameter for filtering active rentals (not yet returned)
-- Add the `user_id` parameter for admin users, allowing them to see all users' rentals if not specified. If
-  specified, show rentals only for the specific user.
-
-### Implement the return Rental functionality
-
-- Ensure a rental cannot be returned twice
-- Increase car inventory by 1 upon return
-- Add an endpoint for returning a rental
-
-### Implement the possibility of sending notifications on each rental creation
-
-- Set up a Telegram chat for posting notifications
-- Set up a Telegram bot for sending notifications (Each team member will have their own telegram bot)
-- Explore the `sendMessage` function interface in the Telegram API
-- Ensure all private data remains private and never enters the GitHub repository. (Use env variables in the .env file
-  for all secret data)
-- Create a separate service (Telegram Notification Service) which will implement a NotificationService interface for
-  sending messages.
-- Integrate sending notifications on new rental creation, providing information about the rental in the message
-
-### Implement a daily-based function for checking overdue rentals
-
-- The function should filter all rentals that are overdue (return date is tomorrow or earlier, and the car is still
-  not returned) and send a notification to the Telegram chat for each overdue rental with detailed information
-- This will be a scheduled task, you'll need to use a @Scheduled annotation.
-- If no rentals are overdue for that day, send a "No rentals overdue today!" notification.
-
-### Payments Endpoint
-
-- Add Payment table into DB and Payment entity
-- Create controllers for list and functional endpoints
-- Ensure customers can only see their payments, while managers can see all of them
-
-### Create your first Stripe Payment Session (manual)
-
-- Refer to the Stripe documentation to understand how to work with payments
-- Create an account on Stripe. Activating your Stripe account is not necessary; Use only test data. You should not
-  work with real money in this project
-- Try to create your first Stripe Session (you can use an example from the documentation) to understand how it
-  works.
-
-### Automate the process of creating Stripe Payment Sessions
-
-- Ensure your Stripe secret keys are kept secret and not pushed to GitHub
-- Implement a create payment session endpoint, which will receive a dto with only rental id and payment type to
-  create a new Stripe Session for it. Calculate the total price of the rental and set it as the unit amount. If the
-  payment type is FINE create a FINE Payment with a preconfigured FINE_MULTIPLIER. (Remember about SRP and design
-  patterns)
-- Calculate the moneyToPay for the payment as the "number of overdue days" multiplied by the daily fee multiplied by
-  the FINE_MULTIPLIER.
-- When creating a session, provide the correct links to the success and cancel endpoints
-- Use `UriComponentsBuilder` to build the URLs dynamically
-- Set the quantity as 1 since we allow renting only 1 car at a time
-- Create a Payment and store the session URL and session ID. Attach the rental to the Payment
-- Leave the success and cancel URLs as default for now. They will be handled later
-- The paymentResponseDto must be returned from this endpoint.
-
-### Implement success and cancel URLs for Payment Service
-
-- Refer to the tutorial to understand how to work with the success endpoint
-- Create a success action that checks whether the Stripe session was successfully paid
-- If the payment was successful, mark it as paid
-- Create a cancel endpoint that informs the user that the payment can be made later (but the session is available
-  for only 24 hours)
-
-### Optional:
-
-- Keep track of expired Stripe sessions
-    - Add each-minute scheduled task for checking Stripe Session for expiration
-    - If the session is expired - Payment should be also marked as EXPIRED (new status)
-    - The user should be able to renew the Payment session (new endpoint)
-- Do not allow users to borrow new books if at least one pending payment for the user
-    - Before creating borrowing - simply check the number of pending payments
-    - If at least one exists - forbid borrowing
-- Send a notification to the telegram chat on each successful Payment with its details
-    - If payment was paid - just send the notification to the telegram chat
-
-### Advanced
-
-- Deploy your app to the AWS
